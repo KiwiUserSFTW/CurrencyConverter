@@ -1,34 +1,31 @@
 import React from "react";
-import { useState } from "react";
+import {useEffect, useState } from "react";
 
-export default function useConversionData() {
-    let [usd, setUsd] = useState("");
+const API_URL = process.env.REACT_APP_CONVERSION_DATA_API;
+const API_KEY = process.env.REACT_APP_CONVERSION_DATA_API_KEY;
+const DEFAULT_USD_VALUE = 0;
 
-    let ApiData = new Promise((res, rej) => {
-        let data = async function(url){
-        let response = await window.fetch(url, {
-        method: "GET",
-        redirect: "follow",
-        headers: {
-            apikey: "znmCAdUOzOgysMj373jTkbyYfcncUPL6",
-        }
-    })
-     return response;
-}
-console.log(process.env)
+const useConversionData = () => {
+    let [rates, setUsd] = useState(DEFAULT_USD_VALUE);
 
-data(process.env.REACT_APP_CONVERSION_DATA_API).then((res) => res.text()
-).then(result => {
-result = JSON.parse(result); 
-let {base, rates} = result
-console.log(rates.UAH)
-if(base) {
-    res({rates})
-}
-})
+    useEffect(() => {
+        const requestOptions = {
+            method: "GET",
+            headers: {
+                apikey: API_KEY
+            }
+        };
 
+        fetch(API_URL, requestOptions)
+        .then(response => response.json())
+        .then(({rates}) => {rates.EUR *= rates.UAH; setUsd(rates)})
+        .catch(err => {
+            console.log(err);
+       
+        });
+    }, [])
+    console.log(rates)
+    return rates;
+};
 
-    }).then((result) => setUsd(result.rates.UAH));
-    
-    return usd;
-}
+export default useConversionData;
