@@ -1,4 +1,3 @@
-import React from "react";
 import {useEffect, useState } from "react";
 
 const API_URL = process.env.REACT_APP_CONVERSION_DATA_API;
@@ -27,5 +26,7 @@ const useConversionData = () => {
   
     return rates;
 };
+
+
 
 export default useConversionData;

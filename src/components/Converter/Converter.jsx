@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import useConversionData from "../../hooks/useConversionData";
-import { FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { FormControl, Grid, MenuItem, Select, TextField } from "@mui/material";
 
 let currentOption = [
     { displayName: "USD", type: "USD" },
@@ -27,7 +27,7 @@ export default function Converter() {
     }
 
     
-    function convertPos(x) {
+    function convertPos(x, inputValue) {
         if (x === 1) {
 
          
