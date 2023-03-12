@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import useConversionData from "../../hooks/useConversionData";
-
+import { FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 
 let currentOption = [
     { displayName: "USD", type: "USD" },
@@ -35,7 +35,7 @@ export default function Converter() {
                 case selectValue: return inputValue;
                 case "UAH":
                     switch(selectValue) {
-                     case "USD": return inputValue * UAH 
+                     case "USD": return inputValue * UAH
                      case "EUR": return inputValue * EUR
                     }
 
@@ -47,7 +47,7 @@ export default function Converter() {
 
                 case "EUR": switch(selectValue) {
                     case "USD" : return inputValue * UAH / EUR
-                    case "UAH" : return inputValue / UAH
+                    case "UAH" : return inputValue / EUR
                     }
             }
       
@@ -58,7 +58,7 @@ export default function Converter() {
                 case "UAH":
                     switch(selectValueTwo) {
                      case "USD": return inputValue * UAH 
-                     case "EUR": return inputValue / EUR
+                     case "EUR": return inputValue * EUR
                     }
 
                 case "USD": 
@@ -117,11 +117,16 @@ function ConversionContainer(props) {
 function ConversionSelect(props) {
 
     return (
-        <select onChange={props.onChange}>
+        <Grid>
+ <Select onChange={props.onChange} defaultValue = "USD">
+            
             {currentOption.map((e) => {
-                return <option key={e.type} value={e.displayName}> {e.displayName}</option>
+                return <MenuItem key={e.type} value={e.displayName}> {e.displayName}</MenuItem>
             })}
-        </select>
+        </Select>
+
+        </Grid>
+       
 
     )
 }
@@ -131,8 +136,12 @@ function ConversionInput(props) {
 
     return (
         <>
-            <input onChange={props.onChange} type="number" value={props.inputValue} ></input>
-        </>
+            <FormControl fullWidth>
+                
+                <TextField onChange={props.onChange} type="number" value={props.inputValue} ></TextField>
+
+            </FormControl>
+             </>
 
     )
 }
