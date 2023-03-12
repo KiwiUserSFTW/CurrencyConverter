@@ -1,100 +1,128 @@
 import React from "react";
-import {useState } from "react";
+import { useState } from "react";
+import useConversionData from "../../hooks/useConversionData";
+
 
 let currentOption = [
-    {displayName: "USD", type:"USD"},
-    {displayName: "EUR", type:"EUR"},
-    {displayName: "UAH", type:"UAH"}
+    { displayName: "USD", type: "USD" },
+    { displayName: "EUR", type: "EUR" },
+    { displayName: "UAH", type: "UAH" }
 ]
 export default function Converter() {
-    let [inputValue, setInputValue] = useState("");
+    let {UAH, EUR} = useConversionData();
+  
+    let [inputValue, setInputValue] = useState(0);
     let [selectValue, setSelectValue] = useState("USD");
     let [selectValueTwo, setSelectValueTwo] = useState("USD");
-    let [pos, setPos] = useState("")
+    let [formId, setFormId] = useState("")
+
+    const form = formId === "1" ? convertPos(1, inputValue) : inputValue;
+    const formTwo = formId === "2" ? convertPos(2, inputValue) : inputValue;
+
     function updateInputValue(e) {
         setInputValue(e.target.value);
     }
-    function updatePos(pos) {
-        setPos(pos)
+    function updatePos(formId) {
+        setFormId(formId)
     }
-    const form = pos === "1" ? convertPos(1, inputValue) : inputValue; 
-    const formTwo = pos === "2" ? convertPos(2, inputValue): inputValue;
+
+    
     function convertPos(x) {
-        if(x === 1) {
-        console.log(selectValueTwo)
-        switch(selectValueTwo) {
-            case "UAH": return inputValue * 3
-            case "USD": return inputValue * 5
+        if (x === 1) {
+
+         
+            switch (selectValueTwo) {
+                case selectValue: return inputValue;
+                case "UAH":
+                    switch(selectValue) {
+                     case "USD": return inputValue * UAH 
+                     case "EUR": return inputValue * EUR
+                    }
+
+                case "USD": 
+                    switch(selectValue) {
+                    case "UAH" : return inputValue / UAH
+                    case "EUR" : return inputValue * EUR / UAH
+                    }
+
+                case "EUR": switch(selectValue) {
+                    case "USD" : return inputValue * UAH / EUR
+                    case "UAH" : return inputValue / UAH
+                    }
+            }
+      
         }
-        return inputValue * 2
-        }
-        if(x === 2) {
-            switch(selectValue) {
-                case "USD": return inputValue / 3
-                case "UAH": return inputValue / 5
+        if (x === 2) {
+            switch (selectValue) {
+                case selectValueTwo: return inputValue;
+                case "UAH":
+                    switch(selectValueTwo) {
+                     case "USD": return inputValue * UAH 
+                     case "EUR": return inputValue / EUR
+                    }
+
+                case "USD": 
+                    switch(selectValueTwo) {
+                    case "UAH" : return inputValue / UAH
+                    case "EUR" : return inputValue * EUR / UAH
+                    }
+
+                case "EUR": switch(selectValueTwo) {
+                    case "USD" : return inputValue * UAH / EUR
+                    case "UAH" : return inputValue / EUR
+                    }
             }
         }
     }
-    
+
 
     return (
         <>
-        Converter
-        <ConversionContainer pos = "1" updateInputValue = {updateInputValue} inputValue = {formTwo} updatePos = {updatePos} SelectValue = {selectValue} setSelectValue = {(e) => {setSelectValue(e)}}/>
-        <ConversionContainer pos = "2" updateInputValue = {updateInputValue} inputValue = {form} updatePos = {updatePos} SelectValue = {selectValueTwo} setSelectValue = {(e) => {setSelectValueTwo(e)}}/>
+            Converter
+            <ConversionContainer formId="1" updateInputValue={updateInputValue} inputValue={formTwo} updatePos={updatePos} SelectValue={selectValue} setSelectValue={(e) => { setSelectValue(e) }} />
+            <ConversionContainer formId="2" updateInputValue={updateInputValue} inputValue={form} updatePos={updatePos} SelectValue={selectValueTwo} setSelectValue={(e) => { setSelectValueTwo(e) }} />
         </>
-        
+
     )
 }
 
-function convertPos(x, s) {
-   
 
-
-}
-
-function convertPosTwo(s) {
-    return s()
-}
 function ConversionContainer(props) {
     let selectValue = props.selectValue;
     let inputValue = props.inputValue;
 
     function updateSelectedValue(e) {
         props.setSelectValue(e.target.value);
-        
+
     }
 
     function updateCurrency(e) {
         props.updateInputValue(e)
-        props.updatePos(props.pos)
+        props.updatePos(props.formId)
     }
-    console.log(props.pos)
-    
+
+
 
     return (
         <>
             <br />
-            <ConversionSelect onChange = {updateSelectedValue}/> <br/>
-            <ConversionInput onChange = {updateCurrency} inputValue = {inputValue} type = {selectValue}/> <br/> 
+            <ConversionSelect onChange={updateSelectedValue} /> <br />
+            <ConversionInput onChange={updateCurrency} inputValue={inputValue} type={selectValue} /> <br />
         </>
-        
+
     )
 }
 
 
 function ConversionSelect(props) {
-    
-    
-    
 
     return (
-    <select onChange={props.onChange}>
-     {currentOption.map((e) => {
-        return <option key = {e.displayName} value={e.displayName}> {e.displayName}</option>
-    })}   
-    </select>
-               
+        <select onChange={props.onChange}>
+            {currentOption.map((e) => {
+                return <option key={e.type} value={e.displayName}> {e.displayName}</option>
+            })}
+        </select>
+
     )
 }
 
@@ -103,11 +131,8 @@ function ConversionInput(props) {
 
     return (
         <>
-        <input onChange = {props.onChange} type="number" value = {props.inputValue} ></input>
+            <input onChange={props.onChange} type="number" value={props.inputValue} ></input>
         </>
-        
+
     )
 }
-
-
-

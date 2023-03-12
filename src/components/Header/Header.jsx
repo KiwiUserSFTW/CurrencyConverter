@@ -4,7 +4,6 @@ import HeaderDiv from "./HeaderDiv/HeaderDiv";
 import { useState } from "react";
 
 export default function Header(props) {
-let data = useConversionData();
 let {UAH = "waiting data", EUR} = useConversionData();
     return (
         <div className="Header">

@@ -24,7 +24,7 @@ const useConversionData = () => {
        
         });
     }, [])
-    console.log(rates)
+  
     return rates;
 };
 
