@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import useConversionData from "../../hooks/useConversionData";
+import useConverter from "../../hooks/useCalculator";
 import { FormControl, Grid, MenuItem, Select, TextField } from "@mui/material";
 
 let currentOption = [
@@ -10,11 +11,14 @@ let currentOption = [
 ]
 export default function Converter() {
     let {UAH, EUR} = useConversionData();
-  
-    let [inputValue, setInputValue] = useState(0);
+    let [inputValue, setInputValue] = useState(10);
     let [selectValue, setSelectValue] = useState("USD");
     let [selectValueTwo, setSelectValueTwo] = useState("USD");
-    let [formId, setFormId] = useState("")
+    let [formId, setFormId] = useState("");
+   
+    console.log(formId === 1 ? selectValueTwo : selectValue, formId === 2 ? selectValueTwo : selectValue);
+    let amount = useConverter(formId === 1 ? selectValue : selectValueTwo, formId === 1 ? selectValueTwo : selectValue, inputValue);
+    console.log(selectValueTwo)
 
     const form = formId === "1" ? convertPos(1, inputValue) : inputValue;
     const formTwo = formId === "2" ? convertPos(2, inputValue) : inputValue;
@@ -29,49 +33,12 @@ export default function Converter() {
     
     function convertPos(x, inputValue) {
         if (x === 1) {
-
-         
-            switch (selectValueTwo) {
-                case selectValue: return inputValue;
-                case "UAH":
-                    switch(selectValue) {
-                     case "USD": return inputValue * UAH
-                     case "EUR": return inputValue * EUR
-                    }
-
-                case "USD": 
-                    switch(selectValue) {
-                    case "UAH" : return inputValue / UAH
-                    case "EUR" : return inputValue * EUR / UAH
-                    }
-
-                case "EUR": switch(selectValue) {
-                    case "USD" : return inputValue * UAH / EUR
-                    case "UAH" : return inputValue / EUR
-                    }
-            }
-      
+    
+           // return useConverter(selectValue, selectValueTwo, inputValue)
         }
         if (x === 2) {
-            switch (selectValue) {
-                case selectValueTwo: return inputValue;
-                case "UAH":
-                    switch(selectValueTwo) {
-                     case "USD": return inputValue * UAH 
-                     case "EUR": return inputValue * EUR
-                    }
-
-                case "USD": 
-                    switch(selectValueTwo) {
-                    case "UAH" : return inputValue / UAH
-                    case "EUR" : return inputValue * EUR / UAH
-                    }
-
-                case "EUR": switch(selectValueTwo) {
-                    case "USD" : return inputValue * UAH / EUR
-                    case "UAH" : return inputValue / EUR
-                    }
-            }
+        
+           // return useConverter(selectValueTwo, selectValue, inputValue)    
         }
     }
 
@@ -93,12 +60,14 @@ function ConversionContainer(props) {
 
     function updateSelectedValue(e) {
         props.setSelectValue(e.target.value);
+        props.updatePos(props.formId);
 
     }
 
     function updateCurrency(e) {
         props.updateInputValue(e)
         props.updatePos(props.formId)
+
     }
 
 
@@ -118,7 +87,7 @@ function ConversionSelect(props) {
 
     return (
         <Grid>
- <Select onChange={props.onChange} defaultValue = "USD">
+         <Select onChange={props.onChange} defaultValue = "USD">
             
             {currentOption.map((e) => {
                 return <MenuItem key={e.type} value={e.displayName}> {e.displayName}</MenuItem>
