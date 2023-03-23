@@ -4,6 +4,7 @@ const API_KEY = process.env.REACT_APP_CONVERSION_DATA_API_KEY;
 
 const useConverter = (from, to, amount) => {
     let [amountValue, setAmountValue] = useState(0);
+   
     useEffect(() => {
         const requestOptions = {
             method: 'GET',
