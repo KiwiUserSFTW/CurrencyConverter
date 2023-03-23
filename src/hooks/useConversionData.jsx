@@ -1,6 +1,6 @@
 import {useEffect, useState } from "react";
 
-const API_URL = process.env.REACT_APP_CONVERSION_DATA_API;
+const API_URL = "https://api.apilayer.com/exchangerates_data/latest?symbols=uah%2C%20eur&base=usd";
 const API_KEY = process.env.REACT_APP_CONVERSION_DATA_API_KEY;
 const DEFAULT_USD_VALUE = 0;
 
