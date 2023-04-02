@@ -17,7 +17,7 @@ const useConversionData = () => {
 
         fetch(API_URL, requestOptions)
         .then(response => response.json())
-        .then(({rates}) => {rates.EUR *= rates.UAH; setUsd(rates)})
+        .then(({rates}) => {rates.EUR = 1 / rates.EUR * rates.UAH; setUsd(rates)})
         .catch(err => {
             console.log(err);
        

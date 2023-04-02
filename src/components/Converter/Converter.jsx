@@ -78,7 +78,6 @@ function ConversionContainer(props) {
 
 
 function ConversionSelect(props) {
-console.log(props.type)
     return (
         <Grid>
             <Select onChange={props.onChange} defaultValue = {props.type}>
